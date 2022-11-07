@@ -1,0 +1,2 @@
+# Robustness-of-DNN-against-a-novel-adversarial-technique-in-RGB-and-infrared-domain
+DNN have proven to be very sensible to particular types of perturbations. Here, a novel adversarial technique, called Pixle, is tested on two imge domain: RGB and Infrared. Despite it's applicability, the infrared domain is usually under-explored domain, so it could be interesting to test also the efficacy of adversarial attacks against it. 
