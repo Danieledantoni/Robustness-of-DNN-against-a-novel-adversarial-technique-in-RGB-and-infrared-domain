@@ -1,0 +1,19 @@
+hyper_params:
+  epochs : 20
+  lr : 0.01
+  freq_res : 64
+  batch_dim_train: 64
+  batch_dim_test : 64
+
+data:
+  domain: 'rgb'
+  data_name: 'imagenet'
+
+files_path:
+  images: ""
+  csv: ""
+
+models:
+  net_name: 'vit'
+  already_trained: True
+  path: '-'
