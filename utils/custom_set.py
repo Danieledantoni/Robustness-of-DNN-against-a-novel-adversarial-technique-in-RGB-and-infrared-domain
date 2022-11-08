@@ -25,7 +25,7 @@ class Custom_set(Dataset):
         img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
         image = PIL.Image.open(img_path)
       label = self.img_labels.iloc[idx, 1]
-      if self.transform:
+      if self.transform: 
         image = self.transform(image)
         if image.shape[0] == 1 and self.expand == True:
           image = torch.cat([image, image, image], dim=0)
