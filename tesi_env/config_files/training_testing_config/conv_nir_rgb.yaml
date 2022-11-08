@@ -1,0 +1,19 @@
+hyper_params:
+  epochs : 10
+  lr : 0.01
+  freq_res : 8
+  batch_dim_train: 8
+  batch_dim_test : 8
+
+data:
+  domain: 'rgb'
+  data_name: 'nir'
+
+files_path:
+  images: "C://Users//danie//Desktop//Università//Tesi 2022//TESI//Images//RGB"
+  csv: "C://Users//danie//Desktop//Università//Tesi 2022//TESI//Images//rgb.csv"
+
+models:
+  net_name: 'convnext'
+  already_trained: True
+  path: "C://Users//danie//Desktop//Università//Tesi 2022//TESI//models//model_normal_trained//NIR-Scene//convnext_tiny_rgb.pt"
