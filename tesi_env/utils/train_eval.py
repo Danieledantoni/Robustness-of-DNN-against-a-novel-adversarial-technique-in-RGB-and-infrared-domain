@@ -1,6 +1,5 @@
 import sys
-sys.path.append('C://Users//danie//Desktop//github tesi//tesi_env//src//utils')
-sys.path.append('C://Users//danie//Desktop//github tesi//tesi_env//src//conf')
+sys.path.append('C://Users//danie//Desktop//github tesi//tesi_env//config_files')
 import hydra
 from omegaconf import DictConfig, OmegaConf
 from hydra.core.config_store import ConfigStore
@@ -9,10 +8,10 @@ from torch import nn
 from torch import optim
 import torchvision
 from torchvision import datasets, models, transforms
-from tesi_env.utils.custom_set import *
-from tesi_env.utils.eval import *
-from tesi_env.utils.save_load_model import *
-from tesi_env.train_eval import train_evaluation
+from utils.custom_set import *
+from utils.eval import *
+from utils.save_load_model import *
+from config_files.training_testing_config.config import train_evaluation
 from pytorch_pretrained_vit import ViT
 from torch.utils.data import random_split
 from datasets import load_dataset
@@ -20,7 +19,7 @@ from datasets import load_dataset
 cs = ConfigStore.instance()
 cs.store(name = 'train_eval', node = train_evaluation)
 
-@hydra.main(config_path = 'conf//train_eval', config_name = 'conv_nir_rgb', version_base='1.2')
+@hydra.main(config_path = 'C://Users//danie//Desktop//github tesi//tesi_env//config_files//training_testing_config', config_name = 'conv_nir_rgb', version_base='1.2')
 def train_eval(cfg: train_evaluation):
     OmegaConf.to_yaml(cfg)
 
