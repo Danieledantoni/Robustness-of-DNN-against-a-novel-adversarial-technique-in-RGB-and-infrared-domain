@@ -20,13 +20,13 @@ from datasets import load_dataset
 import attacks.black_pixle
 import attacks.white_pixle
 import config_files
-from config_files.testing_attack_config.config import test_att
+from config_files.testing_attack_config.config import test_def
 
 cs = ConfigStore.instance()
-cs.store(name = 'test_', node = test_att)
+cs.store(name = 'test_', node = test_def)
 
 @hydra.main(config_path = 'C://Users//danie//Desktop//github tesi//tesi_env//config_files//testing_defense_config', config_name = 'det_conv_nir_rgb_black', version_base='1.2')
-def test_attack(cfg: test_att):
+def test_defense(cfg: test_att):
     OmegaConf.to_yaml(cfg)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -217,4 +217,4 @@ def test_attack(cfg: test_att):
     setup.basic_attack(cfg.hyper_params_attack.attack, cfg.hyper_params_attack.number_att, cfg.hyper_params_attack.return_stats)
 
 if __name__ == '__main__':
-    test_attack()
+    test_defense()
