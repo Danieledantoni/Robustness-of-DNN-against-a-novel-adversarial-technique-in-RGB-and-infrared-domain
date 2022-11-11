@@ -50,9 +50,10 @@ class models:
     path: str
 
 @dataclass
-class test_att:
+class test_def:
     par: hyper_params
     att_par : hyper_params_attack
+    def_par : defense_configuration
     dataset: data
     paths: files_path
     model: models
