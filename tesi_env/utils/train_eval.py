@@ -11,6 +11,7 @@ from torchvision import datasets, models, transforms
 from utils.custom_set import *
 from utils.eval import *
 from utils.save_load_model import *
+from utils.fast_adv_training import *
 from config_files.training_testing_config.config import train_evaluation
 from pytorch_pretrained_vit import ViT
 from torch.utils.data import random_split
@@ -176,11 +177,16 @@ def train_eval(cfg: train_evaluation):
         # testing the model if already trained
         test(model, test_loader)
     
-    else:
+    if cfg.models.already_trained == False:
         # else train the model
         for epoch in range(cfg.hyper_params.epochs):
             train(epoch, train_loader, model, opt, loss, cfg.hyper_params.freq_res)
             validation(model, val_loader, loss)
+    
+    if cfg.models.adversarial_training == True:
+        # adversarially training a model
+        for epoch in range(cfg.hyper_params.epochs):
+            adv_train(epoch, train_loader, model, opt, loss, cfg.hyper_params.freq_res)
 
 if __name__ == '__main__':
     train_eval()
