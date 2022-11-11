@@ -11,7 +11,7 @@ class adversarial_test:
     self.attack = attack
     self.model = model
 
-  def basic_attack(self, type_of_attack, max_attacks, stats = False):
+  def basic_attack(self, type_of_attack, max_attacks, stats = False, detection = False):
 
     self.model.eval()
     current_attacks = 0
@@ -24,6 +24,9 @@ class adversarial_test:
 
     if type_of_attack != 'black' and type_of_attack != 'white':
       raise ValueError('Type of attacks can only be: black or white')
+    
+    if len(next(iter(self.data))) > 2:
+        raise ValueError('The function requires the dataset containing only one image domain')
 
     if type_of_attack == 'black':
       print('{} attacked by black-box Pixle'.format(type(self.model).__name__))
@@ -31,7 +34,12 @@ class adversarial_test:
       for batch_idx, (inputs, gt_labels) in enumerate(tqdm(self.data)):
             
         inputs, gt_labels = inputs.to(device), gt_labels.to(device)
-        outputs = self.model(inputs)
+        if detection:
+          outputs, to_keep = self.model(inputs)
+          inputs = inputs[to_keep]
+          gt_labels = gt_labels[to_keep]
+        else:
+          outputs = self.model(inputs)
         _, predictions = torch.max(outputs.data, 1)
         # attack only correct classified images
         corr_class_img = [i for i in range(len(inputs)) if predictions[i] == gt_labels[i]]
@@ -60,11 +68,23 @@ class adversarial_test:
         else:
           pass
 
-        outputs = self.model(inputs)
-        _, predictions = torch.max(outputs.data, 1)
-        number_img += gt_labels.size(0)
-        corr_class_after_attack += predictions.eq(gt_labels.data).cpu().sum().item()
-        successful_attacks += (predictions[image_to_attack] != gt_labels[image_to_attack]).sum().item()
+        if detection:
+          outputs, labels_to_keep = self.model(inputs)
+          if len(outputs) == 0:
+            pass
+          else:
+            _, predictions = torch.max(outputs.data, 1)
+            gt_labels = gt_labels[labels_to_keep]
+            number_img += gt_labels.size(0)
+            corr_class_after_attack += predictions.eq(gt_labels.data).cpu().sum().item()
+            successful_attacks += (predictions[image_to_attack] != gt_labels[image_to_attack]).sum().item()
+
+        else:
+          outputs = self.model(inputs)
+          _, predictions = torch.max(outputs.data, 1)
+          number_img += gt_labels.size(0)
+          corr_class_after_attack += predictions.eq(gt_labels.data).cpu().sum().item()
+          successful_attacks += (predictions[image_to_attack] != gt_labels[image_to_attack]).sum().item()
 
       # evaluating stats
       if stats:
@@ -84,7 +104,12 @@ class adversarial_test:
       for batch_idx, (inputs, gt_labels) in enumerate(tqdm(self.data)):
             
         inputs, gt_labels = inputs.to(device), gt_labels.to(device)
-        outputs = self.model(inputs)
+        if detection:
+          outputs, to_keep = self.model(inputs)
+          inputs = inputs[to_keep]
+          gt_labels = gt_labels[to_keep]
+        else:
+          outputs = self.model(inputs)
         _, predictions = torch.max(outputs.data, 1)
         # attack only correct classified images
         corr_class_img = [i for i in range(len(inputs)) if predictions[i] == gt_labels[i]]
@@ -106,16 +131,28 @@ class adversarial_test:
             end = time.process_time_ns()
             total_time_required += (end - start)
             total_iter_required += self.attack.required_iterations
-            inputs.data[idx_img] = adv_img.data
+            inputs[idx_img].data = adv_img.data
 
         else:
           pass
 
-        outputs = self.model(inputs)
-        _, predictions = torch.max(outputs.data, 1)
-        number_img += gt_labels.size(0)
-        corr_class_after_attack += predictions.eq(gt_labels.data).cpu().sum().item()
-        successful_attacks += (predictions[image_to_attack] != gt_labels[image_to_attack]).sum().item()
+        if detection:
+          outputs, labels_to_keep = self.model(inputs)
+          if len(outputs) == 0:
+            pass
+          else:
+            _, predictions = torch.max(outputs.data, 1)
+            gt_labels = gt_labels[labels_to_keep]
+            number_img += gt_labels.size(0)
+            corr_class_after_attack += predictions.eq(gt_labels.data).cpu().sum().item()
+            successful_attacks += (predictions[image_to_attack] != gt_labels[image_to_attack]).sum().item()
+
+        else:
+          outputs = self.model(inputs)
+          _, predictions = torch.max(outputs.data, 1)
+          number_img += gt_labels.size(0)
+          corr_class_after_attack += predictions.eq(gt_labels.data).cpu().sum().item()
+          successful_attacks += (predictions[image_to_attack] != gt_labels[image_to_attack]).sum().item()
 
       if stats:
         time_required = (total_time_required / 1e+9) / current_attacks
