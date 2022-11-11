@@ -1,0 +1,41 @@
+hyper_params:
+  epochs : 10
+  lr : 0.01
+  freq_res : 8
+  batch_dim_train: 8
+  batch_dim_test : 8
+
+hyper_params_attack:
+  attack : 'black'
+  x_dim : 2
+  y_dim : 2
+  restarts: 100
+  iter_per_restart : 50
+  perc_pixel_per_iter : 0.05
+  number_att : 1
+  return_stats : True
+
+defense_configuration:
+  name: 'clean gan'
+  filter: amf
+  init_size: 2
+  max_size: 5
+  median_window_size: ''
+  threshold: 0.45
+  gan_path: 'C://Users//danie//Desktop//Università//Tesi 2022//TESI//models//model_normal_trained//rgb_large_gen_white_pixle.pt'
+  start_mitigation: 0
+  stop_mitigation: 0
+  vit_mitigation: False
+
+data:
+  domain: 'rgb'
+  data_name: 'nir'
+
+files_path:
+  images: "C://Users//danie//Desktop//Università//Tesi 2022//TESI//Images//NIR//RGB"
+  csv: "C://Users//danie//Desktop//Università//Tesi 2022//TESI//Images//NIR//rgb.csv"
+
+models:
+  net_name: 'convnext'
+  already_trained: True
+  path: "C://Users//danie//Desktop//Università//Tesi 2022//TESI//models//model_normal_trained//NIR-Scene//convnext_tiny_rgb.pt"
