@@ -23,6 +23,7 @@ class models:
     net_name: str
     already_trained: bool
     path: str
+    adversarial_training: bool 
 
 @dataclass
 class train_evaluation:

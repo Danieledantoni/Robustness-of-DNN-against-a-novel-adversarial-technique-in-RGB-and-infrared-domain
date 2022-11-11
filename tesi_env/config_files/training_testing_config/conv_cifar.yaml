@@ -17,3 +17,4 @@ models:
   net_name: 'convnext'
   already_trained: True
   path: '-'
+  adversarial_training: False

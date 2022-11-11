@@ -17,3 +17,4 @@ models:
   net_name: 'convnext'
   already_trained: True
   path: "C://Users//danie//Desktop//Università//Tesi 2022//TESI//models//model_normal_trained//NIR-Scene//convnext_tiny_rgb.pt"
+  adversarial_training: False
